@@ -10,10 +10,13 @@ class User {
     db.query('SELECT * FROM users WHERE id = ?', [id], callback);
   }
 
-  static async createUser(name, email, password, callback) {
+  static async createUser(name, email, password, phone, address, role, callback) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', 
-      [name, email, hashedPassword], callback);
+    db.query(
+      'INSERT INTO users (name, email, password, phone, address, role) VALUES (?, ?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, phone, address, role],
+      callback
+    );
   }
 
   static async updateUser(id, updatedFields, callback) {

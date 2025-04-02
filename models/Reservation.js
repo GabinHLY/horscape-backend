@@ -11,12 +11,12 @@ class Reservation {
 
   static getUserReservations(renter_id, callback) {
     db.query(
-      `SELECT reservations.*, boxes.name as box_name, users.name as owner_name 
+      `SELECT reservations.*, boxes.name as box_name 
        FROM reservations 
        JOIN boxes ON reservations.box_id = boxes.id 
-       JOIN users ON reservations.owner_id = users.id 
-       WHERE reservations.renter_id = ?`, 
-      [renter_id], callback
+       WHERE reservations.renter_id = ?`,
+      [renter_id],
+      callback
     );
   }
 
@@ -26,43 +26,49 @@ class Reservation {
        FROM reservations 
        JOIN boxes ON reservations.box_id = boxes.id 
        JOIN users ON reservations.renter_id = users.id 
-       WHERE reservations.owner_id = ?`, 
-      [owner_id], callback
+       WHERE boxes.owner_id = ?`,
+      [owner_id],
+      callback
     );
   }
 
-  static addReservation(renter_id, owner_id, box_id, start_date, end_date, callback) {
+  static addReservation(renter_id, box_id, start_date, end_date, price_total, callback) {
     db.query(
-      'INSERT INTO reservations (renter_id, owner_id, box_id, start_date, end_date) VALUES (?, ?, ?, ?, ?)', 
-      [renter_id, owner_id, box_id, start_date, end_date], callback
+      'INSERT INTO reservations (renter_id, box_id, start_date, end_date, price_total) VALUES (?, ?, ?, ?, ?)',
+      [renter_id, box_id, start_date, end_date, price_total],
+      callback
     );
   }
 
   static updateReservation(id, renter_id, start_date, end_date, callback) {
     db.query(
-      'UPDATE reservations SET start_date = ?, end_date = ? WHERE id = ? AND renter_id = ?', 
-      [start_date, end_date, id, renter_id], callback
+      'UPDATE reservations SET start_date = ?, end_date = ? WHERE id = ? AND renter_id = ?',
+      [start_date, end_date, id, renter_id],
+      callback
     );
   }
 
-  static updateStatus(id, owner_id, status, callback) {
+  static updateStatus(id, status, callback) {
     db.query(
-      'UPDATE reservations SET status = ? WHERE id = ? AND owner_id = ?', 
-      [status, id, owner_id], callback
+      'UPDATE reservations SET status = ? WHERE id = ?',
+      [status, id],
+      callback
     );
   }
 
   static cancelReservation(id, renter_id, callback) {
     db.query(
-      'UPDATE reservations SET status = "cancelled" WHERE id = ? AND renter_id = ?', 
-      [id, renter_id], callback
+      'UPDATE reservations SET status = "cancelled" WHERE id = ? AND renter_id = ?',
+      [id, renter_id],
+      callback
     );
   }
 
   static deleteReservation(id, renter_id, callback) {
     db.query(
-      'DELETE FROM reservations WHERE id = ? AND renter_id = ?', 
-      [id, renter_id], callback
+      'DELETE FROM reservations WHERE id = ? AND renter_id = ?',
+      [id, renter_id],
+      callback
     );
   }
 

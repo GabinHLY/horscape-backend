@@ -19,3 +19,4 @@ router.get('/user/:id', reservationController.getReservationsByUserId);
 router.get('/box/:id', reservationController.getReservationsByBoxId);
 
 module.exports = router;
+    

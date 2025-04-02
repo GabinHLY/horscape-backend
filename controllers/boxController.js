@@ -16,21 +16,21 @@ exports.getBoxById = (req, res) => {
 };
 
 exports.addBox = (req, res) => {
-  const { name, location, price } = req.body;
-  if (!name || !location || !price) {
+  const { name, description, price, adress } = req.body;
+  if (!name || !description || !price || !adress) {
     return res.status(400).json({ message: "Tous les champs sont requis" });
   }
 
-  Box.addBox(name, location, price, req.user.id, (err, result) => {
+  Box.addBox(name, description, price, adress, req.user.id, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({ message: 'Box ajoutée' });
   });
 };
 
 exports.updateBox = (req, res) => {
-  const { name, location, price } = req.body;
+  const { name, description, price, adress } = req.body;
 
-  Box.updateBox(req.params.id, name, location, price, req.user.id, (err, result) => {
+  Box.updateBox(req.params.id, name, description, price, adress, req.user.id, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Box modifiée' });
   });

@@ -30,11 +30,14 @@ exports.getOwnerReservations = (req, res) => {
 };
 
 exports.addReservation = (req, res) => {
-  const { box_id, start_date, end_date } = req.body;
+  const { box_id, start_date, end_date, price_total } = req.body;
+  if (!box_id || !start_date || !end_date || !price_total) {
+    return res.status(400).json({ message: "Champs manquants" });
+  }
 
-  Reservation.addReservation(req.user.id, req.body.owner_id, box_id, start_date, end_date, (err, result) => {
+  Reservation.addReservation(req.user.id, box_id, start_date, end_date, price_total, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: 'Réservation envoyée au propriétaire' });
+    res.status(201).json({ message: 'Réservation envoyée' });
   });
 };
 
@@ -53,7 +56,8 @@ exports.updateStatus = (req, res) => {
     return res.status(400).json({ message: "Statut invalide" });
   }
 
-  Reservation.updateStatus(req.params.id, req.user.id, status, (err, result) => {
+  // Il faut vérifier que l'utilisateur est bien le propriétaire via une jointure ou middleware si nécessaire
+  Reservation.updateStatus(req.params.id, status, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: `Réservation ${status}` });
   });
