@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'Accès refusé' });
 
   try {
-    // Supprime "Bearer " du token s'il est présent
     const cleanToken = token.replace("Bearer ", "");
     console.log("Token nettoyé :", cleanToken);
 
