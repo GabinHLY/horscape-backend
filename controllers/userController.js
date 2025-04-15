@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+const { promisify } = require('util');
 
 exports.getAllUsers = (req, res) => {
   User.getAllUsers((err, results) => {
